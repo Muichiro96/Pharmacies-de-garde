@@ -10,6 +10,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    protected $attributes = [
+        'isAdmin' => false,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -43,5 +46,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function pharmacies(){
+        return $this->hasMany(pharmacie::class);
     }
 }
