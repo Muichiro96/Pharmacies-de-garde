@@ -13,7 +13,8 @@ class PharmacieController extends Controller
      * Display a listing of the resource.
      */
     public function list(){
-        $pharmacies = pharmacie::all()->where('user_id',Auth::user()->id);;
+        $pharmacies = pharmacie::all();
+        return view('pharmacies.list',compact('pharmacies'));
     }
      public function pharmaciesVille($ville)
     {

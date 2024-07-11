@@ -1,6 +1,15 @@
-@extends('shared.layout')
+@extends('shared.admin')
 @section('title')
-Ajout pharmacie
+Ajout Pharmacie
+@endsection
+@section('path1')
+Pharmacie
+@endsection
+@section('path2')
+Add
+@endsection
+@section('content-header')
+Ajouter Pharmacie
 @endsection
 @section('content')
 @if($errors->any())
@@ -19,7 +28,7 @@ Ajout pharmacie
 @if(session()->has('success'))
 <div class="alert alert-success alert-dismissible mt-4 ml-4 mr-4">
 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-<h4><i class="icon fa fa-check"></i> </h4>
+<h4><i class="icon fa fa-check"></i>Succés </h4>
 {{ session()->get('success') }}
 </div>
 @endif

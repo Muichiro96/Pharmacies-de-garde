@@ -1,4 +1,4 @@
-@extends('shared.layout')
+@extends('shared.admin')
 @section('title')
 Ajout Garde
 @endsection
@@ -9,6 +9,16 @@ Ajout Garde
 
 <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 @endsection
+@section('path1')
+Duty
+@endsection
+@section('path2')
+Add
+@endsection
+@section('content-header')
+Ajout Garde
+@endsection
+
 @section('content')
 @if($errors->any())
 <div class="alert alert-warning alert-dismissible mt-4 ml-4 mr-4">
@@ -26,7 +36,7 @@ Ajout Garde
 @if(session()->has('success'))
 <div class="alert alert-success alert-dismissible mt-4 ml-4 mr-4">
 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-<h4><i class="icon fa fa-check"></i> </h4>
+<h4><i class="icon fa fa-check"></i>Succés </h4>
 {{ session()->get('success') }}
 </div>
 @endif
@@ -83,6 +93,9 @@ Ajout Garde
     </div>
 </div></div>
 
+@endsection
+@section('scripts')
+@parent
 <script src="/plugins/moment/moment.min.js"></script>
 <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 

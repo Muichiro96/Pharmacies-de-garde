@@ -11,9 +11,10 @@ class GardeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function list()
     {
-        //
+        $gardes=garde::all();
+        return view('gardes.list',compact('gardes'));
     }
 
     /**
@@ -50,7 +51,7 @@ class GardeController extends Controller
                 $garde->pharmacies()->attach($ph->idPharmacie);
            
         }
-       echo "success";
+       return redirect('/pharmacie/garde/add')->with('success','Garde ajoutée avec succés');
     }
 
     /**
@@ -66,9 +67,12 @@ class GardeController extends Controller
      */
     public function edit(garde $garde)
     {
-        
-       
-        return view("gardes.edit",compact('garde'));
+        $excludedPharmacies=[];
+        foreach($garde->pharmacies as $pharmacie){
+            $excludedPharmacies[]=$pharmacie->nom;
+        }
+        $pharmacies=pharmacie::whereNotIN('nom',$excludedPharmacies)->get();
+        return view("gardes.edit",compact('garde','pharmacies'));
     }
 
     /**
@@ -77,6 +81,26 @@ class GardeController extends Controller
     public function update(Request $request, garde $garde)
     {
         
+        $request->validate([
+            'type'=> 'required',
+            'date'=>'required',
+            'pharmacies'=>'required|array',
+            
+            
+        ]);
+        $garde->pharmacies()->sync([]);
+        $garde->type = $request->type;
+        $garde->date = $request->date;
+        
+        $garde->save();
+
+        foreach( $request->pharmacies as $pharmacie){
+            $ph = pharmacie::where('nom',$pharmacie)->first();
+        
+                $garde->pharmacies()->attach($ph->idPharmacie);
+           
+        }
+        return redirect('/garde/edit/'.$garde->idGarde)->with('success','Garde modifiée avec succés');
     }
 
     /**

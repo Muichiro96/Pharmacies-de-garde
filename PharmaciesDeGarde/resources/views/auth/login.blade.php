@@ -76,7 +76,7 @@ Remember Me
 
 
 <p class="mb-1">
-<a href="forgot-password.html">I forgot my password</a>
+<a href="#">I forgot my password</a>
 </p>
 <p class="mb-0">
 <a href="{{route('register')}}" class="text-center">Register a new membership</a>
@@ -87,11 +87,11 @@ Remember Me
 </div>
 
 
-<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/jquery/jquery.min.js"></script>
 
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<script src="../../dist/js/adminlte.min.js?v=3.2.0"></script>
+<script src="/dist/js/adminlte.min.js?v=3.2.0"></script>
 
 
 </body></html>
