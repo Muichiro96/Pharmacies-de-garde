@@ -22,9 +22,30 @@ Liste des gardes
 
 <div class="container">
 <div class="row">
-<div class="col">
+<div class="col-4">
 <a href="/garde/add"><button class="btn btn-success mb-4"><i class="fas fa-plus"></i>Ajouter une garde</button></a> 
-</div></div>
+</div>
+<div class="col"></div>
+<div class="col"></div>
+<div class="col"></div>
+<div class="col-4" >
+   
+    <div class="input-group date" id="date"  data-target-input="nearest">
+        <input type="text" class="form-control datetimepicker-input" name="date" id="dateFilter"  data-target="#date">
+        <div class="input-group-append" data-target="#date" data-toggle="datetimepicker">
+        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+        </div>
+    
+    
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}" /> 
+                                                     
+</div>
+<div class="col">
+    <button class="btn btn-primary" onclick="dateFilter()">Filtrer</button>      
+</div>
+</div>
+<div class="filtered">
 @foreach($gardes as $garde)
 <div class="row">
     
@@ -49,7 +70,7 @@ Liste des gardes
 
 <label><i class="fas fa-calendar-day"></i> &emsp;Date : </label> &emsp;{{$garde->date}} 
 <br/><i class="fas fa-hospital"></i>&emsp;<label>Pharmacies :</label>&emsp;   <div class="select2-success" style="display:inline;">
-                <select id="Myselect" class="form-control select2 select2-hidden-accessible" name="pharmacies[]" multiple=""  data-dropdown-css-class="select2-success" style="width: 100%;" data-select2-id="15" tabindex="-1" aria-hidden="true" disabled>
+                <select  class=" pharmacies form-control select2 select2-hidden-accessible"  multiple=""  data-dropdown-css-class="select2-success" style="width: 100%;"  tabindex="-1" aria-hidden="true" disabled>
                 @foreach($garde->pharmacies as $pharmacie)
                 <option selected>{{ $pharmacie->nom}}</option>
                 @endforeach
@@ -65,6 +86,13 @@ Liste des gardes
 </div>
 </div></div>
 @endforeach
+@if($gardes->hasPages())
+<div class="mt-3">
+    {{ $gardes->links('pagination::bootstrap-5') }}
+</div>
+@endif
+</div>
+
 </div>
 @endsection
 @section('scripts')
@@ -76,8 +104,29 @@ Liste des gardes
 
 <script>
     $(function () {
-        $("#Myselect").select2();
-        $('#date').datetimepicker({format:'L'});
-    })
+        $(".pharmacies").select2();
+        $('#date').datetimepicker({format: 'L'});
+    });
+    function dateFilter(){
+   
+   if($('#dateFilter').val()){
+        
+        $.ajax({
+            headers: {'X-CSRF-TOKEN': $('input[name="_token"]').val()},
+            type: "POST",
+            url: "{{route('filterDate')}}",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({date : $('#dateFilter').val() }),
+            success: function(data){
+                $('.filtered').html(`${data.gardes}`);
+                $(".pharmacies").select2();
+            }
+
+        });
+    }else {
+        alert("Selectionnez d'abord la date");
+    }
+   }
 </script>
 @endsection

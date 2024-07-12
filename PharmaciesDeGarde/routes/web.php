@@ -26,7 +26,8 @@ Route::prefix('/pharmacie')->middleware('auth')->group(function(){
     Route::get('list',[PharmacieController::class,'list']);
     Route::get('/edit/{pharmacie}',[PharmacieController::class,'edit'])->name('edit');
     Route::post('/edit/{pharmacie}',[PharmacieController::class,'update']);
-   });
+    Route::get('/delete/{pharmacie}',[PharmacieController::class,'destroy']);
+    Route::post('/ville/filter',[PharmacieController::class,'pharmaciesVille'])->name('filterCity'); });
    /*Route::prefix('/tasks')->middleware('auth')->group(function(){
     Route::get('/list',[TaskController::class,'index']);
     Route::get('/create',[TaskController::class,'create']);
@@ -40,6 +41,7 @@ Route::prefix('/garde')->middleware('auth')->group(function(){
     Route::get('/edit/{garde}',[GardeController::class,'edit']);
     Route::post('/edit/{garde}',[GardeController::class,'update']);
     Route::get('/list',[GardeController::class,'list']);
+    Route::post('date/filter',[GardeController::class,'gardesParDate'])->name('filterDate');
 });
 Route::prefix('/user')->middleware('auth')->group(function(){
     Route::get('/list',[UserController::class,'list'])->name('userlist');

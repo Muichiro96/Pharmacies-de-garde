@@ -74,8 +74,8 @@ Modifier un utilisateur
                 </div>
             
             <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Creer</button>
-            <button type="submit" class="btn btn-default float-right">Liste utilisateurs</button>
+            <button type="submit" class="btn btn-primary">Modifier</button>
+            <a href="/user/list" class="float-right">Liste utilisateurs</a>
             </div>
             </form>
             </div>

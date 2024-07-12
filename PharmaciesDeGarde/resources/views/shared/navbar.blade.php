@@ -2,7 +2,10 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
     <ul class="navbar-nav">
-   
+    <a href="/home" class="navbar-brand">
+      <img src="/logo.jpg" alt="Logo" width="30" height="30" class="d-inline-block align-top img-circle" >
+      <span class="brand-text font-weight-light">TecForge Pharmacy</span>
+    </a>
     <li class="nav-item d-none d-sm-inline-block">
     <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home')?'active':'' }}">Home</a>
     </li>

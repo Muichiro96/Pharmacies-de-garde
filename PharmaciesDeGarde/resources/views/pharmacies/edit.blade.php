@@ -91,7 +91,7 @@ Modifier Pharmacie
             
             <div class="card-footer">
             <button type="submit" class="btn btn-primary">Modifier</button>
-            <button  class="btn btn-default float-right">Liste pharmacies</button>
+            <a href="/pharmacie/list" class="float-right">Liste pharmacies</a>
             </div>
             </form>
             </div>

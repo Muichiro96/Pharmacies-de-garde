@@ -13,16 +13,49 @@ class PharmacieController extends Controller
      * Display a listing of the resource.
      */
     public function list(){
-        $pharmacies = pharmacie::all();
-        return view('pharmacies.list',compact('pharmacies'));
+        $pharmacies = pharmacie::paginate(9);
+        $villes=ville::all();
+        return view('pharmacies.list',compact('pharmacies','villes'));
     }
-     public function pharmaciesVille($ville)
+     public function pharmaciesVille(Request $request)
     {
-        $pharmacies=ville::find($ville)->pharmacies();
+
+            if(!empty($request->id)){
+                $pharmacies=ville::find($request->id)->pharmacies;
+                $html="";
+                foreach($pharmacies as $pharmacie){
+                    $html.='<div class="row">
+    
+<div class="col">
+<div class="card" style="height: 230px">
+    <div class="card-body">
+<h3 class="text-success">
+   <i class="fas fa-hospital"></i> '.$pharmacie->nom.'
+</h3>
+
+<i class="fas fa-building"></i> &emsp;<label>Adresse :</label>&emsp; '.$pharmacie->adresse.'
+<br/>
+<i class="fas fa-phone-alt"></i>&emsp;<label>Téléphone :</label>&emsp;'.$pharmacie->telephone.'
+<br/>
+<label><i class="fas fa-map-marker text-danger"></i> &emsp;Lattitude : </label> &emsp;'.$pharmacie->lattitude.' , &emsp;<label>Longitude :</label>&emsp; '.$pharmacie->longitude.' 
+<br/><div class="float-right"><label>Ville :</label>&emsp; '.$pharmacie->ville->nom.'</div>
+</div>
+<div class="card-footer">
+<a href="/pharmacie/delete/'.$pharmacie->idPharmacie.'"><button  class="btn btn-danger float-right"><i class="fas fa-trash"></i></button></a>
+<a href="/pharmacie/edit/'.$pharmacie->idPharmacie.'"><button  class="btn btn-warning float-right mr-4"><i class="fas fa-pen"></i></button></a>
+
+</div>
+</div>
+</div></div>';
+                 } 
+            return response()->json(['request'=>$html]);
+            }else{
+                return response()->json(['error'=>'something is wrong']);
+            }
     }
-    public function pharmaciesProche($ville){
-        $pharmacies=ville::find($ville)->pharmacies();
-    }
+    /**public function pharmaciesProche($ville){
+       * $pharmacies=ville::find($ville)->pharmacies();
+    }*/
 
     /**
      * Show the form for creating a new resource.
@@ -61,7 +94,7 @@ class PharmacieController extends Controller
         $pharmacie->ville_id=$city->idVille;
         $pharmacie->user_id=Auth::user()->id;
         $pharmacie->save();
-        return redirect('/pharmacie/create')->with('success','Pharmacie ajoutée avec succés');
+        return redirect('/pharmacie/add')->with('success','Pharmacie ajoutée avec succés');
     }
 
     /**

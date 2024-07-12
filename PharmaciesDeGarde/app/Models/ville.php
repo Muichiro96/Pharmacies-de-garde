@@ -9,7 +9,7 @@ class ville extends Model
 { 
     protected $primaryKey= 'idVille';
     public function pharmacies(){
-        return $this->hasMany(pharmacie::class);
+        return $this->hasMany(pharmacie::class,'ville_id');
 
     }
     use HasFactory;

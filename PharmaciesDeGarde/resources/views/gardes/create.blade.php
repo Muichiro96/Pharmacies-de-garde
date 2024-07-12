@@ -86,7 +86,7 @@ Ajout Garde
             
             <div class="card-footer">
             <button type="submit" class="btn btn-primary">Creer</button>
-            <button type="submit" class="btn btn-default float-right">Liste pharmacies</button>
+            <a href="/garde/list" class="float-right">Liste gardes</a>
             </div>
             </form>
             </div>
@@ -104,7 +104,7 @@ Ajout Garde
 <script>
     $(function () {
         $("#Myselect").select2({
-          theme: 'bootstrap4'
+        
         });
         $('#date').datetimepicker({format:'L'});
     })

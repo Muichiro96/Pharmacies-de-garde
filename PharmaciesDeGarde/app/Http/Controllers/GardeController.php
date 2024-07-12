@@ -13,7 +13,7 @@ class GardeController extends Controller
      */
     public function list()
     {
-        $gardes=garde::all();
+        $gardes=garde::paginate(10);
         return view('gardes.list',compact('gardes'));
     }
 
@@ -51,9 +51,55 @@ class GardeController extends Controller
                 $garde->pharmacies()->attach($ph->idPharmacie);
            
         }
-       return redirect('/pharmacie/garde/add')->with('success','Garde ajoutée avec succés');
+       return redirect('/garde/add')->with('success','Garde ajoutée avec succés');
     }
-
+    public function gardesParDate(Request $request){
+        if(!empty($request->date)){
+            $gardes = garde::where('date','=',$request->date)->get();
+            $html="";
+            foreach($gardes as $garde){
+                $html.='<div class="row">
+    
+                <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                <h3 class="text-danger">
+                   <i class="fas fa-shield-alt"></i> Garde
+                </h3>
+                
+                <label><i class="fas fa-list"></i> &emsp;Type :</label>&emsp; ';
+                 if($garde->type=="Jour") 
+                 $html.=$garde->type.'
+                <i class="fas fa-sun text-warning"></i>';
+                elseif($garde->type=='Nuit')
+                $html.=$garde->type.'
+                <i class="fas fa-moon"></i>';
+                else
+                $html.='<span class="right badge badge-success">24h/24</span>';
+              
+                $html.='<br/>
+                
+                <label><i class="fas fa-calendar-day"></i> &emsp;Date : </label> &emsp;'.$garde->date.' 
+                <br/><i class="fas fa-hospital"></i>&emsp;<label>Pharmacies :</label>&emsp;   <div class="select2-success" style="display:inline;">
+                                <select  class=" pharmacies form-control select2 select2-hidden-accessible"  multiple=""  data-dropdown-css-class="select2-success" style="width: 100%;"  tabindex="-1" aria-hidden="true" disabled>';
+                                foreach($garde->pharmacies as $pharmacie){
+                                    $html.='<option selected>'. $pharmacie->nom.'</option>';
+                                }
+                                $html.='</select>
+                                </div>
+                <br/>
+                </div>
+                <div class="card-footer">
+                <a href="/garde/delete/'.$garde->idGarde.'"><button  class="btn btn-danger float-right"><i class="fas fa-trash"></i></button></a>
+                <a href="/garde/edit/'.$garde->idGarde.'"><button  class="btn btn-warning float-right mr-4"><i class="fas fa-pen"></i></button></a>
+                
+                </div>
+                </div>
+                </div></div>';
+            }
+            return response()->json(['gardes' => $html]);
+        }
+    }
     /**
      * Display the specified resource.
      */

@@ -39,7 +39,7 @@ Liste des utilisateurs
 <tbody>
 @foreach($users as $user)
 <tr>
-<td>1.</td>
+<td>{{ $loop->index +1 }}</td>
 <td>{{$user->name}}</td>
 <td>
 {{$user->email}}
@@ -57,18 +57,14 @@ Liste des utilisateurs
 </tbody>
 </table>
 </div>
-<div class="card-footer clearfix">
-<ul class="pagination pagination-sm m-0 float-right">
-<li class="page-item"><a class="page-link" href="#">«</a></li>
-<li class="page-item"><a class="page-link" href="#">1</a></li>
-<li class="page-item"><a class="page-link" href="#">2</a></li>
-<li class="page-item"><a class="page-link" href="#">3</a></li>
-<li class="page-item"><a class="page-link" href="#">»</a></li>
-</ul>
-</div>
+
 
 </div>
 </div></div>
-
+@if($users->hasPages())
+<div class="mt-3">
+    {{ $users->links('pagination::bootstrap-5') }}
+    </div>
+@endif
 </div>
 @endsection

@@ -56,10 +56,10 @@ Modification Garde
             <div class="card-body">
             <div class="form-group">
             <label for="type">Type :</label>
-            <select class="form-control custom-select" value="{{ $garde->type }}" name="type">
-                <option selected>Jour</option>
-                <option >Nuit</option>
-                <option>24h/24</option>
+            <select class="form-control custom-select"  name="type">
+                @if($garde->type=='Jour')<option selected>{{ $garde->type }}</option><option>Nuit</option><option>24h/24</option>@endif
+                @if($garde->type=='Nuit')<option selected>{{ $garde->type }}</option><option >Jour</option><option>24h/24</option>@endif
+                @if($garde->type=='24h/24')<option selected>{{ $garde->type }}</option><option >Jour</option><option>Nuit</option>@endif
                 </select>
             </div>
             <div class="form-group">
@@ -90,8 +90,8 @@ Modification Garde
             
             
             <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Creer</button>
-            <button type="submit" class="btn btn-default float-right">Liste pharmacies</button>
+            <button type="submit" class="btn btn-primary">Modifier</button>
+            <a href="/garde/list" class="float-right">Liste gardes</a>
             </div>
             </form>
             </div>
@@ -108,7 +108,7 @@ Modification Garde
 <script>
     $(function () {
         $("#Myselect").select2({
-          theme: 'bootstrap4'
+         
         });
         $('#date').datetimepicker({format: 'L'});
     })

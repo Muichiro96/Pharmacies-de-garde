@@ -10,9 +10,10 @@
 <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
 
 <link rel="stylesheet" href="/dist/css/adminlte.min.css?v=3.2.0">
+
 @show
 </head>
-<body class="sidebar-mini layout-fixed" style="height: auto;">
+<body class="sidebar-mini layout-fixed " style="height: auto;">
 
 <div class="wrapper">
 
@@ -22,7 +23,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-light-success elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="/home" class="brand-link">
       <img src="/logo.jpg" alt="Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">TecForge Pharmacy</span>
@@ -72,7 +73,7 @@
           </li>
           <li class="nav-item">
             <a href="/user/list" class="nav-link {{ request()->is('user/*')? 'active':'' }}">
-            <i class="nav-icon fas fa-user-md"></i>
+            <i class="nav-icon fas fa-user"></i>
               <p>
                 Utilisateurs
         </p>
@@ -93,7 +94,7 @@
     <!-- /.sidebar -->
   </aside>
 
-<div class="content-wrapper" style="min-height: 527px;">
+<div class="content-wrapper" style="height:auto;">
 
 <section class="content-header">
 <div class="container-fluid">
@@ -119,10 +120,7 @@
 
 </div>
 
-<footer class="main-footer">
 
-<strong>Copyright © 2024-2025 <a href="{{route('home') }}">TecForge</a>.</strong> All rights reserved.
-</footer>
 
 <aside class="control-sidebar control-sidebar-dark" style="display: none; bottom: 57px; top: 57px; height: 527px;">
 
@@ -138,6 +136,7 @@
 <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 
 <script src="/dist/js/adminlte.min.js?v=3.2.0"></script>
+
 @show
 
 
