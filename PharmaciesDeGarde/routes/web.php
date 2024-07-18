@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GardeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
@@ -10,13 +11,14 @@ use App\Http\Middleware\admin;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 Route::get('/register', [RegisterController::class, 'create'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/login', [LoginController::class,'create'])->name('login');
 Route::post('/login', [LoginController::class, 'check']);
 Route::get('/home',function(){
+    
     return view('home');
 })->name('home');
 Route::prefix('/pharmacie')->middleware('auth')->group(function(){
@@ -51,6 +53,7 @@ Route::prefix('/user')->middleware('auth')->group(function(){
     Route::post('/edit/{user}',[UserController::class,'update']);
 
 });
+Route::get('/dashboard',[DashboardController::class,'dashboard']);
 
 Route::get("/logout", [LogoutController::class,'logout'])->name('logout');
 Route::get("/test",function(){
