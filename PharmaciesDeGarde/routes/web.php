@@ -53,7 +53,7 @@ Route::prefix('/user')->middleware('auth')->group(function(){
     Route::post('/edit/{user}',[UserController::class,'update']);
 
 });
-Route::get('/dashboard',[DashboardController::class,'dashboard']);
+Route::get('/dashboard',[DashboardController::class,'dashboard'])->middleware('auth');
 
 Route::get("/logout", [LogoutController::class,'logout'])->name('logout');
 Route::get("/test",function(){

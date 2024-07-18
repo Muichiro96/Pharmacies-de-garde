@@ -9,19 +9,44 @@ Home
     width: 100%;"></div></div>
 <div class="container"><div class="row"><div class="col-xl-4"><button class="btn btn-primary" id="currentLocation" style="width: 100%"><i class="fas fa-map-marker text-danger"></i> &nbsp;Localisez-vous</button></div>
 <div class="col-xl-4"><button class="btn btn-success" id="currentLocation" style="width: 100%;"><i class="fas fa-sun text-warning"></i> &nbsp;Pharmacies de garde Jour</button></div>
-<div class="col-xl-4"><button class="btn btn-success" id="currentLocation" style="width: 100%"><i class="fas fa-moon"></i>&nbsp; pharmacies de garde Nuit</button></div>
+<div class="col-xl-4"><button class="btn btn-success" id="currentLocation" style="width: 100%"><i class="fas fa-moon "></i>&nbsp; Pharmacies de garde Nuit</button></div>
 </div>
+<div class="row">
+  <div class="col">
+   
+    <button type="button" class="btn btn-dark mt-2" style="width: 100%;"><i class="fas fa-history text-primary"></i>&nbsp; Pharmacies de garde &nbsp;<span class="badge bg-success" style="font-weight: bold;">24h/24</span>
+    </button>
+  </div>
+  <div class="col">
+    <button  class="btn btn-secondary mt-2" style="width: 100%;"><i class="fas fa-clock"></i>&nbsp;Horaire normal</button>
+  </div>
+</div>
+
+  <div class="row">
+    <div class="col">
+    <input type="text" class="form-control mt-4" style="width: 100%;" placeholder="Rechercher par adresse,quartier ou ville">  
+    </div></div>
+    <div class="row">
+      <div class="col">
+        <div class="mt-4" id="ville">
+        <span>Votre position :</span><div class="card"><div class="card-body"></div></div>
+          
+      </div>
+      </div>
+    </div>
 @auth
 <div class="row">
-    <div class="col">
+  <div class="col-md-4"></div>
+    <div class="col-md-4">
         <br/>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal">Ajouter Une Pharmacie</button>
+        <button type="button" class="btn btn-warning"  style="width: 100%;" data-toggle="modal" data-target=".modal"><i class="fas fa-edit"></i>&nbsp;Ajouter ou Compléter  une pharmacie</button>
 
         <div class="modal" tabindex="-1">
             <div class="modal-dialog modal-xl">
               <div class="modal-content">
                 <div class="modal-header bg-success">
-                  <h5 class="modal-title">Ajouter Une Pharmacie</h5>
+                  
+                  <h5 class="modal-title"><i class="modal-icon fas fa-plus-square text-black"></i>&nbsp;Ajouter Une Pharmacie</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -86,6 +111,7 @@ Home
             </div>
           </div>
     </div>
+    <div class="col-md-4"></div>
 </div>@endauth
 </div>
 <script>
@@ -171,7 +197,7 @@ if (navigator.geolocation) {
       
       
       map.setCenter(pos);
-      map.setZoom(17);
+      map.setZoom(13);
       var currentPosition = new google.maps.LatLng(pos.lat,pos.lng);
       marker.addListener("click", () => {
         infowindow.setContent(`<div id='content'><h4 id='firstHeading' class='firstHeading'><i class='fas fa-map-marker text-danger'></i>Votre Position </h4><br/>

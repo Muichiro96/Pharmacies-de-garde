@@ -17,7 +17,7 @@
     </li>
     @auth
     @if(Auth::user()->isAdmin )
-    <li class="nav-item d-none d-sm-inline-block"><a href="#" class="nav-link">Dashboard</a>
+    <li class="nav-item d-none d-sm-inline-block"><a href="/dashboard" class="nav-link text-danger">Dashboard</a>
     </li>
     @endif
     @endauth

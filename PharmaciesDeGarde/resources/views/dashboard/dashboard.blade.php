@@ -3,6 +3,9 @@
 Dashboard
 @endsection
 @section('path1')
+<a href="/home">Home</a>
+@endsection
+@section('path2')
 Dashboard
 @endsection
 
