@@ -6,22 +6,31 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PharmacieController;
-use App\Http\Controllers\TaskController;
 use App\Http\Middleware\admin;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\UserController;
+use App\Models\ville;
+use Symfony\Component\Console\Completion\Suggestion;
+
 Route::get('/', function () {
-    return view('home');
+    
+    return view('home',compact('villes'));
+});
+Route::prefix('suggestion')->middleware('auth')->group(function(){
+    Route::post('/add',[SuggestionController::class,'storeSuggestion']);
+    Route::post('/approve',[SuggestionController::class,'approuver'])->name('approve');
+    Route::get('/list',[SuggestionController::class,'suggestionList'])->middleware(admin::class);
 });
 Route::get('/register', [RegisterController::class, 'create'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/login', [LoginController::class,'create'])->name('login');
 Route::post('/login', [LoginController::class, 'check']);
 Route::get('/home',function(){
-    
-    return view('home');
+    $villes=ville::all();
+    return view('home',compact('villes'));
 })->name('home');
-Route::prefix('/pharmacie')->middleware('auth')->group(function(){
+Route::prefix('/pharmacie')->middleware(['auth',admin::class])->group(function(){
     /*Route::get('/list',[PharmacieController::class,'index']);*/
     Route::get('/add',[PharmacieController::class,'create']);
     Route::post('/add',[PharmacieController::class,'store']);
@@ -37,7 +46,7 @@ Route::prefix('/pharmacie')->middleware('auth')->group(function(){
    
     Route::get('/delete/{task}',[TaskController::class,'delete'])->name('delete');
 */
-Route::prefix('/garde')->middleware('auth')->group(function(){ 
+Route::prefix('/garde')->middleware(['auth',admin::class])->group(function(){ 
     Route::get('/add',[GardeController::class,'create']);
     Route::post('/add',[GardeController::class,'store']);
     Route::get('/edit/{garde}',[GardeController::class,'edit']);
@@ -45,7 +54,7 @@ Route::prefix('/garde')->middleware('auth')->group(function(){
     Route::get('/list',[GardeController::class,'list']);
     Route::post('date/filter',[GardeController::class,'gardesParDate'])->name('filterDate');
 });
-Route::prefix('/user')->middleware('auth')->group(function(){
+Route::prefix('/user')->middleware(['auth',admin::class])->group(function(){
     Route::get('/list',[UserController::class,'list'])->name('userlist');
     Route::get('/add',[UserController::class,'create']);
     Route::post('/add',[UserController::class,'store']);
@@ -53,7 +62,7 @@ Route::prefix('/user')->middleware('auth')->group(function(){
     Route::post('/edit/{user}',[UserController::class,'update']);
 
 });
-Route::get('/dashboard',[DashboardController::class,'dashboard'])->middleware('auth');
+Route::get('/dashboard',[DashboardController::class,'dashboard'])->middleware([admin::class]);
 
 Route::get("/logout", [LogoutController::class,'logout'])->name('logout');
 Route::get("/test",function(){

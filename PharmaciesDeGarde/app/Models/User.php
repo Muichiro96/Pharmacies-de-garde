@@ -13,6 +13,7 @@ class User extends Authenticatable
     protected $attributes = [
         'isAdmin' => false,
     ];
+    protected $with = ['pharmacies','suggestions'];
 
     /**
      * The attributes that are mass assignable.

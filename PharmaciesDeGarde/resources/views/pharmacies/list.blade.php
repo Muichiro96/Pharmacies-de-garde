@@ -95,7 +95,7 @@ function filter(){
 
         });
     }else {
-        alert("Selectionnez d'abord la ville");
+        alert("Séléctionnez d'abord la ville");
     }
     
    

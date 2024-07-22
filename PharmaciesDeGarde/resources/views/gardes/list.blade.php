@@ -125,7 +125,7 @@ Liste des gardes
 
         });
     }else {
-        alert("Selectionnez d'abord la date");
+        alert("Séléctionnez d'abord la date");
     }
    }
 </script>

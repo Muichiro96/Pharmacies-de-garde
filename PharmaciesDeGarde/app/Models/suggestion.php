@@ -8,8 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class suggestion extends Model
 {
-    use HasFactory;
+    protected $primaryKey= 'idSuggestion';
+    
+    protected $attributes = [
+        'status' => 'Pending',
+    ];
     function user(){
         return $this->belongsTo(User::class);
     }
+    
+    use HasFactory;
+    
 }

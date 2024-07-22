@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\pharmacie;
 use App\Models\User;
 use App\Models\garde;
+use App\Models\suggestion;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -39,12 +40,13 @@ class DashboardController extends Controller
         }
       
         $userCount=User::count();
+        $suggestionCount=suggestion::count();
         $pharmacyCount=pharmacie::count();
         $adminCount=User::where('isAdmin',true)->get()->count();
         $normalUserCount=User::where('isAdmin',false)->get()->count();
         
         $gardeCount=garde::count();
-        return view('dashboard.dashboard',compact('userCount','pharmacyCount','gardeCount','adminCount','normalUserCount','gardeMonth','jourGardePercent','allDayGardePercent','nuitGardePercent'));
+        return view('dashboard.dashboard',compact('userCount','pharmacyCount','gardeCount','suggestionCount','adminCount','normalUserCount','gardeMonth','jourGardePercent','allDayGardePercent','nuitGardePercent'));
 
     }
 }

@@ -86,7 +86,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/user/list" class="nav-link {{ request()->is('suggestion/*')? 'active':'' }}">
+            <a href="/suggestion/list" class="nav-link {{ request()->is('suggestion/*')? 'active':'' }}">
             <i class="nav-icon fas fa-comments"></i>
               <p>
                Suggestions

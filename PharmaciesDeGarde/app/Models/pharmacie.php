@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class pharmacie extends Model
 {
     protected $primaryKey= 'idPharmacie';
+    
     public function gardes(){
         return $this->belongsToMany(garde::class,foreignPivotKey:'pharmacie_id',relatedPivotKey: 'garde_id');
     }

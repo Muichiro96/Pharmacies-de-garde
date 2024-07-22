@@ -41,7 +41,10 @@ Home
         <br/>
         <button type="button" class="btn btn-warning"  style="width: 100%;" data-toggle="modal" data-target=".modal"><i class="fas fa-edit"></i>&nbsp;Ajouter ou Compléter  une pharmacie</button>
 
-        <div class="modal" tabindex="-1">
+
+
+
+        <div  class="modal" tabindex="-1">
             <div class="modal-dialog modal-xl">
               <div class="modal-content">
                 <div class="modal-header bg-success">
@@ -50,8 +53,35 @@ Home
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post">
+                    <form method="post" action="/suggestion/add">
                         @csrf
+                        @if($errors->any())
+                        <script>
+                          $('.modal').modal('show');
+                        
+                        </script>
+<div class="alert alert-warning alert-dismissible mt-4 ml-4 mr-4">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+
+<ul>
+        @foreach($errors->all() as $error)
+            <li>{{$error}}</li>
+        @endforeach
+</ul>
+</div> 
+
+@endif
+
+@if(session()->has('success'))
+<script>
+  $('.modal').modal('show');
+
+</script>
+<div class="alert alert-success alert-dismissible mt-4 ml-4 mr-4">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+<h4><i class="icon fa fa-check"></i>Succés </h4>
+{{ session()->get('success') }}
+</div>@endif
                     <div class="card-body">
                     <div class="form-group">
                     <label for="name">Nom Pharmacie :</label>
@@ -68,7 +98,7 @@ Home
                         <input type="text" name="phone" class="form-control"  placeholder="+212687555">
                         </div>
                         <div class="form-group">
-                        <label for="district">Quartier :</label>
+                        <label for="district">Quartier</label>(optionnel)<label>:</label>
                         
                         <input type="text" name="district" class="form-control"  placeholder="Hay Ilham">
                         </div>
@@ -87,10 +117,11 @@ Home
                                     <label for="ville">Ville :</label>
                                     <select class="form-control custom-select" name="city"  >
                                         <option value="" disabled selected>Selectionnez la ville</option>
-                                        
-                                        <option >
-                                         test
+                                        @foreach($villes as $ville)
+                                        <option>
+                                         {{ $ville->nom }}
                                         </option>
+                                        @endforeach
                                         
                                         </select>
                                     </div>
@@ -101,12 +132,13 @@ Home
                 
                     
                     
-                </form>
+                
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary">Ajouter</button>
                 </div>
+              </form>
               </div>
             </div>
           </div>
@@ -252,13 +284,11 @@ function geocodeLatLng(geocoder, map, infowindow,position) {
       if (response.results[0]) {
         map.setZoom(11);
 
-        const marker = new google.maps.Marker({
-          position: latlng,
-          map: map,
-        });
+        const div = document.getElementById("Adresse");
+        div.innerHTML=response.results[0].formatted_address;
+        console.log(response.results[0]);
 
-        infowindow.setContent(response.results[0].formatted_address);
-        infowindow.open(map, marker);
+        
       } else {
         window.alert("No results found");
       }

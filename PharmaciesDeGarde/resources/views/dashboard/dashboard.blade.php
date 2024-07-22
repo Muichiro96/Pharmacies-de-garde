@@ -30,7 +30,7 @@ Dashboard
     
     <div class="col-md-3 col-sm-6 col-12">
     <div class="info-box bg-success">
-    <span class="info-box-icon"><i class="fas fa-pills"></i></span>
+    <span class="info-box-icon"><i class="fa fa-medkit"></i></span>
     <div class="info-box-content">
     <span class="info-box-text">Pharmacies</span>
     <span class="info-box-number">{{ $pharmacyCount }}</span>
@@ -61,7 +61,7 @@ Dashboard
     <span class="info-box-icon"><i class="fas fa-comments"></i></span>
     <div class="info-box-content">
     <span class="info-box-text">Suggestions</span>
-    <span class="info-box-number">41,410</span>
+    <span class="info-box-number">{{  $suggestionCount}}</span>
     
    
     </div>
