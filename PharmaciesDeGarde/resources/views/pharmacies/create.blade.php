@@ -64,16 +64,17 @@ Ajouter Pharmacie
                 <input type="text" name="district" class="form-control"  placeholder="Hay Ilham">
                 </div>
                 <div class="form-group">
+                    <label for="lattitude">Lattitude :</label>
+                    
+                    <input type="text" name="lattitude" class="form-control"  placeholder="1.455588">
+                    </div>
+                <div class="form-group">
                     
                     <label for="longitude">Longitude :</label>
                     
                     <input type="text" name="longitude" class="form-control"  placeholder="25.1145">
                     </div>
-                    <div class="form-group">
-                        <label for="lattitude">Lattitude :</label>
-                        
-                        <input type="text" name="lattitude" class="form-control"  placeholder="1.455588">
-                        </div>
+                    
                         <div class="form-group">
                             <label for="ville">Ville :</label>
                             <select class="form-control custom-select" name="city"  >

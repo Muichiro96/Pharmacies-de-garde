@@ -29,7 +29,7 @@ Liste des utilisateurs
 <thead>
    
 <tr>
-<th style="width: 10px">#</th>
+<th style="width: 10px">&#8470;</th>
 <th>Name</th>
 <th>E-mail</th>
 <th style="width: 40px">isAdmin</th>

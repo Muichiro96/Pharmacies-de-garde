@@ -12,6 +12,7 @@ List
 Suggestion List
 @endsection
 @section('content')
+@if(!$suggestions->isEmpty())
 <table class="table table-striped">
 <thead class="table-dark">
     <tr>
@@ -27,18 +28,19 @@ Suggestion List
 <tr>
     <td>{{  $loop->index + 1}}</td>
     <td>{{ $suggestion->user->name }}</td>
-    <td class="status{{ $suggestion->idSuggestion }}"><span class="badge bg-warning" >{{  $suggestion->status }}</span></td>
+    <td id="status{{ $suggestion->idSuggestion }}"><span class="text-warning" >{{  $suggestion->status }}</span></td>
     <td>{{ $suggestion->nom }}</td>
-    <td class="actions{{ $suggestion->idSuggestion }}">
-        <button class="btn btn-primary view" value="{{ $suggestion->idSuggestion }}"><i class="fas fa-eye"></i></button>
-        <button class="btn btn-success approve" value="{{ $suggestion->idSuggestion }}"><i class="fas fa-check"></i></button>
-        <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+    <td >
+        <button class="btn btn-primary view actions{{ $suggestion->idSuggestion }}" value="{{ $suggestion->idSuggestion }}"><i class="fas fa-eye"></i></button>
+        <button class="btn btn-success approve actions{{ $suggestion->idSuggestion }}" value="{{ $suggestion->idSuggestion }}" name="approve"><i class="fas fa-check"></i></button>
+        <button class="btn btn-danger disapprove actions{{ $suggestion->idSuggestion }}" name="disapprove" value="{{ $suggestion->idSuggestion }}"><i class="fa fa-times"></i></button>
         
         
     </td>
 </tr>
 
 @endforeach
+</table>
 
 @foreach($suggestions as $suggestion)
 <div class="modal modal{{ $suggestion->idSuggestion }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -101,8 +103,19 @@ Suggestion List
       </div>
 </div>
 @endforeach
+@else
+<br/>
 
+<center><i class="fas fa-exclamation-triangle text-warning"></i> &nbsp;
 
+    Pas de suggestions disponibles pour le moment !</center>
+@endif
+
+@if($suggestions->hasPages())
+<div class="mt-3">
+    {{ $suggestions->links('pagination::bootstrap-5') }}
+</div>
+@endif
 @endsection
 @section('scripts')
 @parent
@@ -116,26 +129,51 @@ Suggestion List
         });
     }
 let approveBtns=document.getElementsByClassName('approve');
-for(let i=0;i<approveBtns.length;i++){
-    approveBtns[i].addEventListener('click',function(){
-        console.log(approveBtns[i].value);
+for(let j=0;j<approveBtns.length;j++){
+    approveBtns[j].addEventListener('click',function(){
+        let value=disapproveBtns[j].value
+        console.log(value)
         $.ajax({
             headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}" },
             type: "POST",
             url: "{{route('approve')}}",
             contentType: "application/json",
             dataType: "json",
-            data: JSON.stringify({suggestion : approveBtns[i].value }),
+            data: JSON.stringify({suggestion : value }),
             success: function(data){
-                let id=approveBtns[i].value
+                let id=value
                 if(data.success){
-               $(`.actions${id}`).html("");
-               $(`.status${id}`).html('<span class="badge bg-success" >Approved</span>');
+               $()
+               $(`#status${id}`).html('<span class="text-success" >Approved</span>');
+               $(`.actions${id}`).hide();
                 }
             }
 
         });
-    })
+    });
+}
+let disapproveBtns=document.getElementsByClassName('disapprove');
+for(let k=0;k<disapproveBtns.length;k++){
+    disapproveBtns[k].addEventListener('click',function(){
+        let value=disapproveBtns[k].value
+        console.log(value)
+     $.ajax({
+            headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+            type: "POST",
+            url: "{{route('disapprove')}}",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({suggestion : value }),
+            success: function(data){
+                let id=value
+                if(data.success){
+               $(`.actions${id}`).hide();
+               $(`#status${id}`).html('<span class="text-danger" >Disapproved</span>');
+                }
+            }
+
+        });
+    });
 }
 </script>
 @endsection

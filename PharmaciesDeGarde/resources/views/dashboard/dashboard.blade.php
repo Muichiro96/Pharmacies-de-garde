@@ -146,18 +146,19 @@ Dashboard
       
          
           var barChartCanvas = $('#barChart').get(0).getContext('2d')
+
           var barChartData ={
       labels  : ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
       datasets: [
         {
-          label               : 'Gardes des pharmacies par mois',
+          label               : 'Pharmacies de garde par mois',
           backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
+          borderColor         : 'rgba(60,141,200,0.8)',
           pointRadius          : false,
           pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointStrokeColor    : 'rgba(60,141,200,1)',
           pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
+          pointHighlightStroke: 'rgba(60,141,200,1)',
           data                : [{{ $gardeMonth[0] }}, {{ $gardeMonth[1]==0?12: $gardeMonth[1]}}, {{ $gardeMonth[2]==0?8: $gardeMonth[2] }}, {{ $gardeMonth[3]==0?5: $gardeMonth[2] }}, {{ $gardeMonth[4]==0?3: $gardeMonth[2] }}, {{ $gardeMonth[5] }}, {{ $gardeMonth[6] }},{{ $gardeMonth[7] }},{{ $gardeMonth[8] ==0?12: $gardeMonth[2]}},{{ $gardeMonth[9]==0?18: $gardeMonth[9] }},{{ $gardeMonth[10]==0?10: $gardeMonth[10] }},{{ $gardeMonth[11] }}]
         }]};
           

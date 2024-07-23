@@ -34,7 +34,7 @@ class DashboardController extends Controller
             if(!empty($gardes)){
             foreach($gardes as $garde){
                 
-                $gardeChartCount+=$garde->pharmacies()->count();
+                $gardeChartCount+=$garde->pharmacies->count();
             }}
             $gardeMonth[] = $gardeChartCount;
         }

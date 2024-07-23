@@ -53,7 +53,7 @@ Liste des gardes
 <div class="card">
     <div class="card-body">
 <h3 class="text-danger">
-   <i class="fas fa-shield-alt"></i> Garde
+   <i class="fas fa-shield-alt"></i>&nbsp;garde &#8470; {{ $loop->index +1 }}
 </h3>
 
 <label><i class="fas fa-list"></i> &emsp;Type :</label>&emsp; 
@@ -64,7 +64,7 @@ Liste des gardes
 {{$garde->type}} 
 <i class='fas fa-moon'></i>
 @else
-<span class="right badge badge-success">24h/24</span>
+<span class="text-success text-bold">24h/24</span>
 @endif
 <br/>
 

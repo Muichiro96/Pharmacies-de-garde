@@ -36,7 +36,7 @@ class SuggestionController extends Controller
         return back()->with(['success' =>'Merci pour votre suggestion']);
     }
     function suggestionList(){
-        $suggestions= suggestion::where('status',"Pending")->get();
+        $suggestions= suggestion::where('status',"Pending")->paginate(10);
         return view("suggestions.list",compact('suggestions'));
     }
     function approuver(Request $request){
@@ -61,5 +61,17 @@ class SuggestionController extends Controller
             return response()->json(['error'=>'something is wrong']);
         }
     
+    }
+    function desapprouver(Request $request){
+        if(!empty($request->suggestion)){
+            $suggestion=suggestion::where("idSuggestion",$request->suggestion)->first();
+            $suggestion->status="Disapproved";
+            $suggestion->save();
+            return response()->json(['success'=>"disapproved"]);
+        }
+    }
+    function userList(){
+        $userList=suggestion::where('user_id',Auth::user()->id)->paginate(7);
+        return view('suggestions.userlist',['list'=> $userList]);
     }
 }

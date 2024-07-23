@@ -66,16 +66,17 @@ Modifier Pharmacie
                 <input type="text" name="district" class="form-control" value="{{ $pharmacie->quartier? $pharmacie->quartier : ''  }}"  placeholder="Hay Ilham">
                 </div>
                 <div class="form-group">
+                    <label for="lattitude">Lattitude :</label>
+                    
+                    <input type="text" name="lattitude" class="form-control" value="{{ $pharmacie->lattitude }}" placeholder="1.455588">
+                    </div>
+                <div class="form-group">
                     
                     <label for="longitude">Longitude :</label>
                     
                     <input type="text" name="longitude" class="form-control" value="{{ $pharmacie->longitude }}" placeholder="25.1145">
                     </div>
-                    <div class="form-group">
-                        <label for="lattitude">Lattitude :</label>
-                        
-                        <input type="text" name="lattitude" class="form-control" value="{{ $pharmacie->lattitude }}" placeholder="1.455588">
-                        </div>
+                    
                         <div class="form-group">
                             <select class="form-control custom-select" name="city"  >
                                 <option value="" disabled>Selectionnez la ville</option>

@@ -15,11 +15,13 @@ use Symfony\Component\Console\Completion\Suggestion;
 
 Route::get('/', function () {
     
-    return view('home',compact('villes'));
+    return redirect('home');
 });
 Route::prefix('suggestion')->middleware('auth')->group(function(){
     Route::post('/add',[SuggestionController::class,'storeSuggestion']);
+    Route::get('/user-list',[SuggestionController::class,'userList']);
     Route::post('/approve',[SuggestionController::class,'approuver'])->name('approve');
+    Route::post('/disapprove',[SuggestionController::class,'desapprouver'])->name('disapprove')->middleware(admin::class);
     Route::get('/list',[SuggestionController::class,'suggestionList'])->middleware(admin::class);
 });
 Route::get('/register', [RegisterController::class, 'create'])->name('register');
