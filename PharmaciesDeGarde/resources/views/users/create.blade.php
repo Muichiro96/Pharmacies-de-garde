@@ -37,7 +37,7 @@ Ajouter un utilisateur
         <div class="col mt-4">
         <div class="card">
             <div class="card-header bg-primary">
-            <h3 class="card-title"><i class="fa fa-user-md"></i>&nbsp; Ajouter un utilisateur</h3>
+            <h3 class="card-title"><i class="fa fa-user-plus"></i>&nbsp; Ajouter un utilisateur</h3>
             </div>
             
             

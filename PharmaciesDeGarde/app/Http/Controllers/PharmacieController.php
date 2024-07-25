@@ -110,7 +110,7 @@ class PharmacieController extends Controller
      */
     public function edit(pharmacie $pharmacie)
     {
-        $pharmacie=pharmacie::with("ville")->find($pharmacie->idPharmacie);
+        
         $villes=ville::all();
         return view('pharmacies.edit',compact('pharmacie','villes'));
        
@@ -131,7 +131,6 @@ class PharmacieController extends Controller
             
         ]);
         
-        $pharmacie=pharmacie::where('idPharmacie',$pharmacie->idPharmacie)->first();
         $city = ville::where('nom',$request->city)->first();
         
        
@@ -153,7 +152,7 @@ class PharmacieController extends Controller
      */
     public function destroy(pharmacie $pharmacie)
     {
-        $pharmacie=pharmacie::where('idPharmacie',$pharmacie->idPharmacie)->first();
+        
         $pharmacie->delete();
         return redirect('pharmacie/list');
     }

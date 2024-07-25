@@ -154,6 +154,7 @@ class GardeController extends Controller
      */
     public function destroy(garde $garde)
     {
-        //
+        $garde->delete();
+        return redirect('garde/list');
     }
 }

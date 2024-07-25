@@ -54,6 +54,7 @@ Route::prefix('/garde')->middleware(['auth',admin::class])->group(function(){
     Route::get('/edit/{garde}',[GardeController::class,'edit']);
     Route::post('/edit/{garde}',[GardeController::class,'update']);
     Route::get('/list',[GardeController::class,'list']);
+    Route::get('/delete/{garde}',[GardeController::class,'destroy']);
     Route::post('date/filter',[GardeController::class,'gardesParDate'])->name('filterDate');
 });
 Route::prefix('/user')->middleware(['auth',admin::class])->group(function(){
@@ -62,6 +63,7 @@ Route::prefix('/user')->middleware(['auth',admin::class])->group(function(){
     Route::post('/add',[UserController::class,'store']);
     Route::get('/edit/{user}',[UserController::class,'edit']);
     Route::post('/edit/{user}',[UserController::class,'update']);
+    Route::get('/delete/{user}',[UserController::class,'destroy']);
 
 });
 Route::get('/dashboard',[DashboardController::class,'dashboard'])->middleware([admin::class]);

@@ -14,7 +14,7 @@ Home
 <div class="row">
   <div class="col">
    
-    <button type="button" class="btn btn-dark mt-2" style="width: 100%;"><i class="fas fa-history text-primary"></i>&nbsp; Pharmacies de garde &nbsp;<span class="badge bg-success" style="font-weight: bold;">24h/24</span>
+    <button type="button" class="btn btn-danger mt-2" style="width: 100%;"><i class="fas fa-history text-dark"></i>&nbsp; Pharmacies de garde &nbsp;<span class="badge bg-olive" style="font-weight: bold;">24h/24</span>
     </button>
   </div>
   <div class="col">
