@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GardeController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -72,6 +73,10 @@ Route::get("/logout", [LogoutController::class,'logout'])->name('logout');
 Route::get("/test",function(){
     return view('shared.admin');
 });
+Route::post("/pharmacies_garde_nuit",[HomeController::class,'pharmaciesGardeNuit'])->name('GardeNuit');
+Route::post("/pharmacies_garde_jour",[HomeController::class,'pharmaciesGardeJour'])->name('GardeJour');
+Route::post("/pharmacies_garde_all_day",[HomeController::class,'pharmaciesGardeAllDay'])->name('GardeAllDay');
+Route::post("/pharmacies",[HomeController::class,'pharmaciesVille'])->name('pharmacies');
 /*Route::middleware(["auth",admin::class])->get("/test",function(){
     return view("testpage");
 });*/

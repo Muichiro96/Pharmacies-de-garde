@@ -2,34 +2,41 @@
 @section('title')
 Home
 @endsection
+@section('imports')
+@parent
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+@endsection
 @section('content')
 
 
 <div class="card"><div id="map" style="height: 400px; 
     width: 100%;"></div></div>
 <div class="container"><div class="row"><div class="col-xl-4"><button class="btn btn-primary" id="currentLocation" style="width: 100%"><i class="fas fa-map-marker text-danger"></i> &nbsp;Localisez-vous</button></div>
-<div class="col-xl-4"><button class="btn btn-success" id="currentLocation" style="width: 100%;"><i class="fas fa-sun text-warning"></i> &nbsp;Pharmacies de garde Jour</button></div>
-<div class="col-xl-4"><button class="btn btn-success" id="currentLocation" style="width: 100%"><i class="fas fa-moon "></i>&nbsp; Pharmacies de garde Nuit</button></div>
+<div class="col-xl-4"><button class="btn btn-success" id="gardeJour" style="width: 100%;"><i class="fas fa-sun text-warning"></i> &nbsp;Pharmacies de garde Jour</button></div>
+<div class="col-xl-4"><button class="btn btn-success" id="gardeNuit" style="width: 100%"><i class="fas fa-moon "></i>&nbsp; Pharmacies de garde Nuit</button></div>
 </div>
 <div class="row">
   <div class="col">
    
-    <button type="button" class="btn btn-danger mt-2" style="width: 100%;"><i class="fas fa-history text-dark"></i>&nbsp; Pharmacies de garde &nbsp;<span class="badge bg-olive" style="font-weight: bold;">24h/24</span>
+    <button type="button" class="btn btn-danger mt-2" id="gardeAllDay" style="width: 100%;"><i class="fas fa-history text-dark"></i>&nbsp; Pharmacies de garde &nbsp;<span class="badge bg-olive" style="font-weight: bold;">24h/24</span>
     </button>
   </div>
   <div class="col">
-    <button  class="btn btn-secondary mt-2" style="width: 100%;"><i class="fas fa-clock"></i>&nbsp;Horaire normal</button>
+    <button  class="btn btn-secondary mt-2" style="width: 100%;" id="pharmacies"><i class="fas fa-clock"></i>&nbsp;Horaire normal</button>
   </div>
 </div>
 
   <div class="row">
     <div class="col">
-    <input type="text" class="form-control mt-4" style="width: 100%;" placeholder="Rechercher par adresse,quartier ou ville">  
+    <input type="text" id="autocomplete" class="form-control mt-4" style="width: 100%;" placeholder="Rechercher par adresse,quartier ou ville">  
     </div></div>
     <div class="row">
       <div class="col">
         <div class="mt-4" id="ville">
-        <span>Votre position :</span><div class="card"><div class="card-body"></div></div>
+        <span>Votre position :</span><div class="card mt-2"><div class="card-body" id="adresse"></div></div>
           
       </div>
       </div>
@@ -148,7 +155,6 @@ Home
 </div>@endauth
 </div>
 <script>
-
   ((g) => {
     var h,
       a,
@@ -183,23 +189,28 @@ Home
     d[l]
       ? console.warn(p + " only loads once. Ignoring:", g)
       : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
-  })({ key: "AIzaSyCOd2qg9cSqNNN3bJvec7_GK_YrFpyQgw0", v: "weekly" });
+  })({ key: "AIzaSyB5ko5GZfVEHS8MB_tB1sfaVu3-su42Zc0", v: "weekly"});
+  
   let map;
-
+  let markers = [];
+  let pharmacieMarkers = [];
 async function initMap() {
 
 const position = { lat: 30.42068147260423, lng : -9.599089574524355 }
 // Request needed libraries.
 //@ts-ignore
 const locationImage = document.createElement("img");
-locationImage.src="/mylocation.png";
-locationImage.style="width:70px;height:70px";
+locationImage.src="/myposition.png";
+locationImage.style="width:90px;height:70px";
+
 const { Map } = await google.maps.importLibrary("maps");
 
-
+let collisionBehavior = google.maps.CollisionBehavior.REQUIRED;
 const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 const geocoder = new google.maps.Geocoder();
 const infowindow = new google.maps.InfoWindow();
+const {Autocomplete} = await google.maps.importLibrary("places");
+
 
 // The map, centered at Uluru
 map = new Map(document.getElementById("map"), {
@@ -211,8 +222,290 @@ mapId: "DEMO_MAP_ID",
 // The marker, positioned at Uluru
 
 let locationButton = document.getElementById("currentLocation");
+let gardeNuitButton = document.getElementById("gardeNuit");
+let gardeJourButton = document.getElementById("gardeJour");
+let pharmaciesButton  = document.getElementById("pharmacies");
+let gardeAllDayButton  = document.getElementById("gardeAllDay");
+const options = {
+ componentRestrictions: { country: "ma" },
+    fields: ["formatted_address", "geometry", "name"],
+    strictBounds: false,
+  };
 
+ 
+
+  const autocomplete = new Autocomplete(document.getElementById("autocomplete"), options);
+
+  // Bind the map's bounds (viewport) property to the autocomplete object,
+  // so that the autocomplete requests use the current map bounds for the
+  // bounds option in the request.
+ autocomplete.addListener("place_changed", () => {
+	deleteMarkers();
+  deletePharmacieMarker();
+    infowindow.close();
+	
+    
+
+    const place = autocomplete.getPlace();
+
+    if (!place.geometry || !place.geometry.location) {
+      
+      window.alert("No details available for input: '" + place.name + "'");
+      return;
+    }
+
+    
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
+      map.setCenter(place.geometry.location);
+      map.setZoom(17);
+    }
+	
+	m=new AdvancedMarkerElement({
+        map: map,
+         position:place.geometry.location,
+         content: locationImage,
+         zIndex: 999,
+        });
+      
+    
+	
+        geocodeLatLng(geocoder, map,{lat: place.geometry.location.lat(),lng: place.geometry.location.lng() });
+  m.addListener("click", () => {
+        infowindow.setContent(`<div id='content'><h4 id='firstHeading' class='firstHeading'><i class='fas fa-map-marker text-danger'></i>Votre Position </h4><br/>
+        <label>Lattitude :</label>&nbsp; ${place.geometry.location.lat()} , <label>Longitude :</label>&nbsp; ${place.geometry.location.lng()}<br/><br/>
+        <label>Adresee : </label>&nbsp;${document.getElementById('monAdresse').textContent}
+        </div>`);
+    infowindow.open({
+      anchor: m,
+      map,
+    });
+	
+  });
+  
+  addMarker(m);
+     });
+	 
+	 
+
+gardeJourButton.addEventListener("click",()=> {
+  if(document.getElementById("cityquery")){
+    deletePharmacieMarker();
+    $.ajax({
+      headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+            type: "POST",
+            url: "{{route('GardeJour')}}",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({ville : document.getElementById("cityquery").textContent}),
+            success: function(data){
+              if(data.pharmacies.length>0){
+              for(pharmacie of data.pharmacies){
+                for(ph of pharmacie.pharmacies){
+                    
+                    const pos = {
+                      lat:parseFloat( ph.lattitude),
+                      lng: parseFloat(ph.longitude),
+                    };
+                 
+                const gardeJourImage = document.createElement("img");
+                gardeJourImage.src="/jour.png";
+                gardeJourImage.style="width:50px;height:50px";
+
+                const marker=new AdvancedMarkerElement({
+                  map: map,
+                  position:pos,
+                  content: gardeJourImage,
+                  collisionBehavior: collisionBehavior,
+
+                });
+                const content=`${ph.nom}`;
+                marker.addListener('click',function(){
+                        infowindow.setContent(content);
+                infowindow.open({
+                  anchor: marker,
+                  map,
+                  
+                });
+
+                });
+                addPharmacieMarker(marker);
+                
+               }
+              }
+            }}
+    });
+    
+  }
+  else{
+    alert("S'il vous plait,localisez-vous D'abord");
+  }
+});
+gardeAllDayButton.addEventListener("click",()=> {
+  if(document.getElementById("cityquery")){
+    deletePharmacieMarker();
+    $.ajax({
+      headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+            type: "POST",
+            url: "{{route('GardeAllDay')}}",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({ville : document.getElementById("cityquery").textContent}),
+            success: function(data){
+              if(data.pharmacies){
+              for(pharmacie of data.pharmacies){
+                for(ph of pharmacie.pharmacies){
+                    
+                    const pos = {
+                      lat:parseFloat( ph.lattitude),
+                      lng: parseFloat(ph.longitude),
+                    };
+                 
+                const gardeAllDayImage = document.createElement("img");
+                gardeAllDayImage.src="/allDay.png";
+                gardeAllDayImage.style="width:55px;height:60px";
+
+                const marker=new AdvancedMarkerElement({
+                  map: map,
+                  position:pos,
+                  content: gardeAllDayImage,
+                  collisionBehavior: collisionBehavior,
+
+                });
+                const content=`${ph.nom}`;
+                marker.addListener('click',function(){
+                        infowindow.setContent(content);
+                infowindow.open({
+                  anchor: marker,
+                  map,
+                  
+                });
+
+                });
+                addPharmacieMarker(marker);
+                
+               }
+              }
+            }}
+    });
+    
+  }
+  else{
+    alert("S'il vous plait,localisez-vous D'abord");
+  }
+});
+gardeNuitButton.addEventListener("click",()=> {
+  if(document.getElementById("cityquery")){
+    deletePharmacieMarker();
+    $.ajax({
+      headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+            type: "POST",
+            url: "{{route('GardeNuit')}}",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({ville : document.getElementById("cityquery").textContent}),
+            success: function(data){
+              if(data.pharmacies){
+              for(pharmacie of data.pharmacies){
+                for(ph of pharmacie.pharmacies){
+                    
+                    const pos = {
+                      lat:parseFloat( ph.lattitude),
+                      lng: parseFloat(ph.longitude),
+                    };
+                 
+                const gardeNuitImage = document.createElement("img");
+                gardeNuitImage.src="/nuit.png";
+                gardeNuitImage.style="width:50px;height:50px";
+
+                const marker=new AdvancedMarkerElement({
+                  map: map,
+                  position:pos,
+                  content: gardeNuitImage,
+                  collisionBehavior: collisionBehavior,
+
+                });
+                const content=`${ph.nom}`;
+                marker.addListener('click',function(){
+                        infowindow.setContent(content);
+                infowindow.open({
+                  anchor: marker,
+                  map,
+                  
+                });
+
+                });
+                addPharmacieMarker(marker);
+                
+               }
+              }
+            }}
+    });
+    
+  }
+  else{
+    alert("S'il vous plait,localisez-vous D'abord");
+  }
+});
+pharmaciesButton.addEventListener("click",()=> {
+  if(document.getElementById("cityquery")){
+    deletePharmacieMarker();
+    console.log(document.getElementById("cityquery").textContent);
+    $.ajax({
+      headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+            type: "POST",
+            url: "{{route('pharmacies')}}",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({ville : document.getElementById("cityquery").textContent}),
+            success: function(data){
+              
+              
+            for(pharmacie of data.pharmacies){
+                console.log(pharmacie);
+                    
+                    const pos = {
+                      lat:parseFloat( pharmacie.lattitude),
+                      lng: parseFloat(pharmacie.longitude),
+                    };
+                 
+                const pharmacieImage = document.createElement("img");
+                pharmacieImage.src="/pharmacie.png";
+                pharmacieImage.style="width:50px;height:50px";
+
+                const marker=new AdvancedMarkerElement({
+                  map: map,
+                  position:pos,
+                  content: pharmacieImage,
+                  
+
+                });
+                
+                const content=`${pharmacie.nom}`;
+                marker.addListener('click',function(){
+                        infowindow.setContent(content);
+                infowindow.open({
+                  anchor: marker,
+                  map,
+                  
+                });
+
+                });
+                addPharmacieMarker(marker);
+                
+               }
+             
+            }
+    });
+    
+  }
+  else{
+    alert("S'il vous plait,localisez-vous D'abord");
+  }
+});
 locationButton.addEventListener("click", () => {
+  deletePharmacieMarker();
 // Try HTML5 geolocation.
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
@@ -221,27 +514,33 @@ if (navigator.geolocation) {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
+      
+		deleteMarkers();
         const marker = new AdvancedMarkerElement({
         map: map,
         position: pos,
         content: locationImage,
+        zIndex: 999,
         title: "Your position",
     });
       
       
+    geocodeLatLng(geocoder, map,pos);
       map.setCenter(pos);
-      map.setZoom(13);
-      var currentPosition = new google.maps.LatLng(pos.lat,pos.lng);
+      map.setZoom(19);
       marker.addListener("click", () => {
         infowindow.setContent(`<div id='content'><h4 id='firstHeading' class='firstHeading'><i class='fas fa-map-marker text-danger'></i>Votre Position </h4><br/>
-        Lattitude : ${pos.lat} , Longitude : ${pos.lng}
+        <label>Lattitude :</label>&nbsp; ${pos.lat} , <label>Longitude : </label>&nbsp;${pos.lng}<br/><br/>
+        <label>Adresee :</label>&nbsp; ${document.getElementById('monAdresse').textContent}
         </div>`);
     infowindow.open({
       anchor: marker,
       map,
     });
+	
   });
-      geocodeLatLng(geocoder, map, infowindow,pos);
+	addMarker(marker);
+     
       
     },
     () => {
@@ -272,7 +571,7 @@ for (var i = 0; i < results.length; i++) {
 }
 }
 
-function geocodeLatLng(geocoder, map, infowindow,position) {
+function geocodeLatLng(geocoder, map,position) {
  
   const latlng = {
     lat:position.lat,
@@ -280,23 +579,106 @@ function geocodeLatLng(geocoder, map, infowindow,position) {
   };
 
   geocoder
-    .geocode({ location: latlng })
+    .geocode({ location: latlng, 'language': 'fr' })
     .then((response) => {
       if (response.results[0]) {
         map.setZoom(11);
+		const div=document.getElementById("adresse");
+		
+		var arrAddress = response.results[0].address_components;
+		var itemSublocality='';
+		var itemAreaFirstLevel='';
+		var itemAreaSecondLevel='';
+		var itemLocality='';
+		var itemCountry='';
+		var itemPc='';
+		var itemSnumber='';
 
-        const div = document.getElementById("Adresse");
-        div.innerHTML=response.results[0].formatted_address;
-        console.log(response.results[0]);
+	
+		for(let i=0;i < arrAddress.length;i++) {
+		
 
-        
+			if (arrAddress[i].types[0] == "locality"){
+				
+				itemLocality = arrAddress[i].long_name;
+			}
+
+			if (arrAddress[i].types[0] == "country"){ 
+				
+				itemCountry = arrAddress[i].long_name;
+			}
+
+			if (arrAddress[i].types[0] == "postal_code"){ 
+				
+				itemPc = arrAddress[i].long_name;
+			}
+	
+			if (arrAddress[i].types[0] == "administrative_area_level_2"){ 
+				 
+				itemAreaSecondLevel = arrAddress[i].long_name;
+			}
+			if (arrAddress[i].types[0] == "administrative_area_level_1"){ 
+				  
+				itemAreaFirstLevel = arrAddress[i].long_name;
+			}
+	
+			if (arrAddress[i].types[1] == "sublocality"){ 
+				
+				itemSublocality = arrAddress[i].long_name;
+			}
+   
+}
+		div.innerHTML=`<label>Ville :&emsp;</label><span id='cityquery'>${itemLocality}</span>
+		&emsp;<label>Cité :&emsp;</label>${itemSublocality }<br/>
+		<label>Province:</label>&emsp;${itemAreaSecondLevel}
+		&emsp;<label>Région :</label>&emsp;${itemAreaFirstLevel}<br/>
+		<label>Adresse:&emsp;</label><span id='monAdresse'>${response.results[0].formatted_address}</span>`;
+		
+		
+       
       } else {
         window.alert("No results found");
       }
     })
     .catch((e) => window.alert("Geocoder failed due to: " + e));
 }
+function addMarker(marker) {
+ markers.push(marker);
+}
 
+
+function setMapOnAll(map) {
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+function setMapOnPharmacies(map){
+  for (let i = 0; i < pharmacieMarkers.length; i++) {
+    pharmacieMarkers[i].setMap(map);
+  }
+}
+function hidePharmaciesMarkers(){
+  setMapOnPharmacies(null);
+}
+
+function hideMarkers() {
+  setMapOnAll(null);
+}
+
+
+
+function deleteMarkers() {
+  hideMarkers();
+  markers = [];
+}
+function addPharmacieMarker(marker){
+  
+  pharmacieMarkers.push(marker);
+}
+function deletePharmacieMarker(){
+hidePharmaciesMarkers();
+pharmacieMarkers= [];
+}
 initMap();
 
 </script>

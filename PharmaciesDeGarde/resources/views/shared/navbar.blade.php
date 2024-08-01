@@ -3,7 +3,7 @@
 
     <ul class="navbar-nav">
     <a href="/home" class="navbar-brand">
-      <img src="/logo.jpg" alt="Logo" width="30" height="30" class="d-inline-block align-top img-circle" >
+      <img src="/favicon.png" alt="Logo" width="30" height="30" class="d-inline-block align-top img-circle" >
       <span class="brand-text font-weight-light">TecForge Pharmacy</span>
     </a>
     <li class="nav-item d-none d-sm-inline-block">

@@ -78,10 +78,10 @@ Modification Garde
                 <div class="select2-success">
                 <select id="Myselect" class="form-control select2 select2-hidden-accessible" name="pharmacies[]" multiple="" data-placeholder="Selectionnez les pharmacies" data-dropdown-css-class="select2-success" style="width: 100%;" data-select2-id="15" tabindex="-1" aria-hidden="true">
                 @foreach($garde->pharmacies as $pharmacie)
-                <option selected>{{ $pharmacie->nom}}</option>
+                <option selected value="{{ $pharmacie->nom}}">{{ $pharmacie->nom}}&nbsp;( {{ $pharmacie->ville->nom }} )</option>
                 @endforeach
                 @foreach($pharmacies as $pharmacie)
-                <option >{{ $pharmacie->nom}}</option>
+                <option  value="{{ $pharmacie->nom}}">{{ $pharmacie->nom}}&nbsp;( {{ $pharmacie->ville->nom }} )</option>
                 @endforeach
                 </select>
                 </div>

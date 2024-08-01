@@ -72,7 +72,7 @@ Liste des gardes
 <br/><i class="fas fa-hospital"></i>&emsp;<label>Pharmacies :</label>&emsp;   <div class="select2-success" style="display:inline;">
                 <select  class=" pharmacies form-control select2 select2-hidden-accessible"  multiple=""  data-dropdown-css-class="select2-success" style="width: 100%;"  tabindex="-1" aria-hidden="true" disabled>
                 @foreach($garde->pharmacies as $pharmacie)
-                <option selected>{{ $pharmacie->nom}}</option>
+                <option selected>{{ $pharmacie->nom}} : {{$pharmacie->ville->nom}}</option>
                 @endforeach
                 </select>
                 </div>
