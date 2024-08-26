@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GardeController;
 use App\Http\Controllers\HomeController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\UserController;
 use App\Models\ville;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Completion\Suggestion;
 
 Route::get('/', function () {
@@ -77,6 +79,13 @@ Route::post("/pharmacies_garde_nuit",[HomeController::class,'pharmaciesGardeNuit
 Route::post("/pharmacies_garde_jour",[HomeController::class,'pharmaciesGardeJour'])->name('GardeJour');
 Route::post("/pharmacies_garde_all_day",[HomeController::class,'pharmaciesGardeAllDay'])->name('GardeAllDay');
 Route::post("/pharmacies",[HomeController::class,'pharmaciesVille'])->name('pharmacies');
+Route::get("/user_profil",function(){
+    $user=Auth::user();
+    return view("users.profil",compact('user'));
+})->middleware('auth');
 /*Route::middleware(["auth",admin::class])->get("/test",function(){
     return view("testpage");
 });*/
+Route::get("/contactez-nous",[ContactController::class,'contact_form']);
+
+Route::post("/contactez-nous",[ContactController::class,'contact_us']);

@@ -10,7 +10,7 @@
     <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home')?'active':'' }}">Home</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-    <a href="#" class="nav-link ">Contact</a>
+        <a href="/contactez-nous" class="nav-link {{ request()->is('contactez*')? 'active':'' }}">Contact</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
     <a href="#" class="nav-link">About</a>
@@ -35,7 +35,7 @@
            </strong> </a>
            
            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/profile">Profile</a>
+            <a class="dropdown-item" href="/user_profil">Profile</a>
             <a class="dropdown-item" href="/suggestion/user-list">Suggestions</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item text-danger" href="{{ route('logout') }}">Logout</a>

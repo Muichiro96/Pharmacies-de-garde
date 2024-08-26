@@ -2,13 +2,7 @@
 @section('title')
 Home
 @endsection
-@section('imports')
-@parent
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
-@endsection
 @section('content')
 
 
@@ -320,7 +314,14 @@ gardeJourButton.addEventListener("click",()=> {
                   collisionBehavior: collisionBehavior,
 
                 });
-                const content=`${ph.nom}`;
+                const content=`<h3 class="text-success">
+   <i class="fas fa-hospital"></i> ${ph.nom}
+</h3>
+
+<i class="fas fa-building"></i> &emsp;<label>Adresse :</label>&emsp; ${ph.adresse}
+<br/>
+<i class="fas fa-phone-alt"></i>&emsp;<label>Téléphone :</label>&emsp; ${ph.telephone}
+<br/>`;
                 marker.addListener('click',function(){
                         infowindow.setContent(content);
                 infowindow.open({
@@ -373,7 +374,14 @@ gardeAllDayButton.addEventListener("click",()=> {
                   collisionBehavior: collisionBehavior,
 
                 });
-                const content=`${ph.nom}`;
+                const content=`<h3 class="text-success">
+   <i class="fas fa-hospital"></i> ${ph.nom}
+</h3>
+
+<i class="fas fa-building"></i> &emsp;<label>Adresse :</label>&emsp; ${ph.adresse}
+<br/>
+<i class="fas fa-phone-alt"></i>&emsp;<label>Téléphone :</label>&emsp; ${ph.telephone}
+<br/>`;
                 marker.addListener('click',function(){
                         infowindow.setContent(content);
                 infowindow.open({
@@ -426,7 +434,14 @@ gardeNuitButton.addEventListener("click",()=> {
                   collisionBehavior: collisionBehavior,
 
                 });
-                const content=`${ph.nom}`;
+                const content=`<h3 class="text-success">
+   <i class="fas fa-hospital"></i> ${ph.nom}
+</h3>
+
+<i class="fas fa-building"></i> &emsp;<label>Adresse :</label>&emsp; ${ph.adresse}
+<br/>
+<i class="fas fa-phone-alt"></i>&emsp;<label>Téléphone :</label>&emsp; ${ph.telephone}
+<br/>`;
                 marker.addListener('click',function(){
                         infowindow.setContent(content);
                 infowindow.open({
@@ -482,9 +497,17 @@ pharmaciesButton.addEventListener("click",()=> {
 
                 });
                 
-                const content=`${pharmacie.nom}`;
+                const content=`<h3 class="text-success">
+   <i class="fas fa-hospital"></i> ${pharmacie.nom}
+</h3>
+
+<i class="fas fa-building"></i> &emsp;<label>Adresse :</label>&emsp; ${pharmacie.adresse}
+<br/>
+<i class="fas fa-phone-alt"></i>&emsp;<label>Téléphone :</label>&emsp; ${pharmacie.telephone}
+<br/>`;
                 marker.addListener('click',function(){
                         infowindow.setContent(content);
+                        
                 infowindow.open({
                   anchor: marker,
                   map,
